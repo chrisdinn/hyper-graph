@@ -9,7 +9,8 @@ Usage
 Currently supports only basic id requests
 
     SocialGraph.get('518018845')
-    => {"name"=>"Chris Dinn", "id"=>"518018845", "last_name"=>"Dinn", "link"=>"http://www.facebook.com/chrisdinn", "first_name"=>"Chris"}
+    => {"name"=>"Chris Dinn", "id"=>"518018845", "last_name"=>"Dinn", "link"=>"http://www.facebook.com/chrisdinn", 
+    "first_name"=>"Chris"}
     
     SocialGraph.get('518018845', :access_token => 'your-access-token')
     => {"name"=>"Chris Dinn", "timezone"=>-4, "id"=>"518018845", "birthday"=>"05/28/1983", "last_name"=>"Dinn",
