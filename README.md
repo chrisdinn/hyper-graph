@@ -17,10 +17,8 @@ Currently supports only basic id requests, like so:
     "updated_time"=>"2010-03-17T20:19:03+0000", "verified"=>true, "link"=>"http://www.facebook.com/chrisdinn",
     "email"=>"yourproxyemailaddress@proxymail.facebook.com", "first_name"=>"Chris"}
 
-
----
-
-####Note on Patches/Pull Requests
+Note on Patches/Pull Requests
+-----------------------------
 
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -30,6 +28,6 @@ Currently supports only basic id requests, like so:
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-####Copyright
+#### Copyright
 
 Copyright (c) 2010 Chris Dinn. See LICENSE for details.
