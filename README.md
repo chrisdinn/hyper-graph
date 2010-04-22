@@ -12,7 +12,7 @@ Currently supports only basic id requests, like so:
     => {:first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :id=>518018845}
     
     irb > SocialGraph.get('518018845', :access_token => 'your-access-token')
-    {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :timezone=>-4, :birthday=>"05/28/1983", :id=>518018845, :verified=>true}
+    => {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :timezone=>-4, :birthday=>"05/28/1983", :id=>518018845, :verified=>true}
 	
 
 Note on Patches/Pull Requests
@@ -29,4 +29,4 @@ Note on Patches/Pull Requests
 Copyright
 -----------------------------
 
-**Copyright © 2010 Chris Dinn** See LICENSE for details.
+© 2010 Chris Dinn. See LICENSE for details.
