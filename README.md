@@ -26,6 +26,7 @@ Note on Patches/Pull Requests
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-#### Copyright
+Copyright
+-----------------------------
 
-Copyright (c) 2010 Chris Dinn. See LICENSE for details.
+**Copyright © 2010 Chris Dinn** See LICENSE for details.
