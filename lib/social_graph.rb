@@ -21,7 +21,7 @@ class SocialGraph
     protected
     
     def build_query(options)
-      query = options.to_a.collect{ |i| "#{i[0].to_s}=#{i[1]}" }.join('&')
+      query = options.to_a.collect{ |i| "#{i[0].to_s}=#{i[1]}" }.sort.join('&')
       return "?#{query}" unless query == ""
       ""
     end
@@ -75,7 +75,16 @@ class SocialGraph
       else
         return object
       end
-    end
-    
+    end   
   end
+  
+  # Instance methods
+  def initialize(access_token)
+    @access_token = access_token
+  end
+  
+  def get(requested_object_id, options = {})
+    self.class.get(requested_object_id, options.merge(:access_token => @access_token))
+  end
+  
 end

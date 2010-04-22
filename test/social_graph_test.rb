@@ -4,7 +4,7 @@ class SocialGraphTest < Test::Unit::TestCase
 
   def setup
     @mock_connection = mock('api-connection')
-    Net::HTTP.expects(:new).returns(@mock_connection)
+    Net::HTTP.stubs(:new).returns(@mock_connection)
   end
   
   def test_get_object_info_while_unauthenticated
@@ -80,13 +80,34 @@ class SocialGraphTest < Test::Unit::TestCase
                                     :height => 604, :width => 402, :link => "http://www.facebook.com/photo.php?pid=3217614&id=511872444", 
                                     :icon => "http://static.ak.fbcdn.net/rsrc.php/z2E5Y/hash/8as8iqdm.gif", 
                                     :created_time => Time.parse("2010-01-10T23:00:10+0000"), :updated_time => Time.parse("2010-01-10T23:06:36+0000")}]
-  
      access_token = "test-access-token"
      limit = 2
      mock_response = stub(:body => json_api_response)
-     @mock_connection.stubs(:get).with("/me/photos?limit=#{limit}&access_token=#{access_token}").returns(mock_response)
+     @mock_connection.stubs(:get).with("/me/photos?access_token=#{access_token}&limit=#{limit}").returns(mock_response)
 
      assert_equal expected_sorted_array, SocialGraph.get('me/photos', :access_token => access_token, :limit => limit)
+  end
+  
+  def test_instance_with_stored_access_token
+    json_api_response = '{"id":"518018845","name":"Chris Dinn","first_name":"Chris","last_name":"Dinn","link":"http://www.facebook.com/chrisdinn","birthday":"05/28/1983","email":"expected-app-specific-email@proxymail.facebook.com","timezone":-4,"verified":true,"updated_time":"2010-03-17T20:19:03+0000"}'
+    expected_parsed_response = {  :id => 518018845, 
+                                  :name => "Chris Dinn", 
+                                  :first_name => "Chris", 
+                                  :last_name => "Dinn", 
+                                  :link => "http://www.facebook.com/chrisdinn", 
+                                  :birthday => "05/28/1983", 
+                                  :email => "expected-app-specific-email@proxymail.facebook.com", 
+                                  :timezone => -4, 
+                                  :verified => true, 
+                                  :updated_time => Time.parse("2010-03-17T20:19:03+0000")}
+     access_token = "test-access-token"
+     mock_response = stub(:body => json_api_response)
+     @mock_connection.stubs(:get).with("/me?access_token=#{access_token}").returns(mock_response)
+     
+     graph = SocialGraph.new(access_token)
+     
+     assert_equal expected_parsed_response, SocialGraph.get('me', :access_token => access_token)
+     assert_equal expected_parsed_response, graph.get('me')
   end
   
 end
