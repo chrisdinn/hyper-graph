@@ -20,7 +20,7 @@ Currently supports only basic id requests, like so:
 
 ---
 
-###Note on Patches/Pull Requests
+####Note on Patches/Pull Requests
 
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -30,6 +30,6 @@ Currently supports only basic id requests, like so:
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
+####Copyright
 
 Copyright (c) 2010 Chris Dinn. See LICENSE for details.
