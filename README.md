@@ -8,14 +8,12 @@ Usage
 
 Currently supports only basic id requests, like so:
 
-    % SocialGraph.get('518018845')
-    => {"name"=>"Chris Dinn", "id"=>"518018845", "last_name"=>"Dinn", "link"=>"http://www.facebook.com/chrisdinn", 
-    "first_name"=>"Chris"}
+    irb > SocialGraph.get('518018845')
+    => {:first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :id=>518018845}
     
-    % SocialGraph.get('518018845', :access_token => 'your-access-token')
-    => {"name"=>"Chris Dinn", "timezone"=>-4, "id"=>"518018845", "birthday"=>"05/28/1983", "last_name"=>"Dinn",
-    "updated_time"=>"2010-03-17T20:19:03+0000", "verified"=>true, "link"=>"http://www.facebook.com/chrisdinn",
-    "email"=>"yourproxyemailaddress@proxymail.facebook.com", "first_name"=>"Chris"}
+    irb > SocialGraph.get('518018845', :access_token => 'your-access-token')
+    {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :timezone=>-4, :birthday=>"05/28/1983", :id=>518018845, :verified=>true}
+	
 
 Note on Patches/Pull Requests
 -----------------------------
