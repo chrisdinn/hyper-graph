@@ -141,4 +141,14 @@ class SocialGraphTest < Test::Unit::TestCase
       SocialGraph.get('me/home')
     end
   end
+  
+  def test_delete_request
+    json_api_response = 'true'
+    access_token = "test-access-token"
+    mock_response = stub(:body => json_api_response)
+    @mock_connection.stubs(:post).with("/514569082_115714061789461/likes", "access_token=#{access_token}&method=delete").returns(mock_response)
+    
+    graph = SocialGraph.new(access_token)
+    assert_equal true, graph.delete('514569082_115714061789461/likes')
+  end
 end

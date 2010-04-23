@@ -27,10 +27,12 @@ You can also request connections:
 	:icon=>"http://static.ak.fbcdn.net/rsrc.php/z2E5Y/hash/8as8iqdm.gif", :tags=>[{:name=>"Chris Dinn", :y=>15.3846, :created_time=>Sun Jan 10 18:06:41 -0500 2010, :id=>518018845, :x=>83.8889}], :created_time=>Sun Jan 10 18:00:10 -0500 2010, 
 	:id=>248026512444, :width=>604, :height=>483}]
 
-Similarly, make a post request:
+Similarly, make a post or delete request:
 	irb > graph.post('514569082_115714061789461/likes')
     => true
 	irb > graph.post('514569082_115714061789461/comments', :message => 'durian is disgustingly delicious')
+    => true
+	irb > graph.delete('514569082_115714061789461/likes')
     => true
 
 Time variables are converted into Time objects, IDs are converted to integers. Paging information is discarded from requests that return an array, so be sure to managed paging manually.

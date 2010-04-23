@@ -34,6 +34,10 @@ class SocialGraph
         return normalize_response(data)
       end
     end
+    
+    def delete(requested_object_id, options = {})
+       post(requested_object_id, options.merge(:method => 'delete'))
+    end
   
     protected
     
@@ -106,5 +110,9 @@ class SocialGraph
   
   def post(requested_object_id, options = {})
     self.class.post(requested_object_id, options.merge(:access_token => @access_token))
+  end
+
+  def delete(requested_object_id, options = {})
+    self.class.delete(requested_object_id, options.merge(:access_token => @access_token))
   end
 end
