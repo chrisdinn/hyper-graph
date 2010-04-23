@@ -5,4 +5,4 @@ require 'bundler'
 Bundler.setup(:default, :test)
 Bundler.require(:default, :test)
 
-require 'social_graph'
+require 'hyper_graph'

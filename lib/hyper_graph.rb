@@ -1,11 +1,10 @@
 require 'net/http'
-require 'addressable/uri'
 require 'time'
 require 'json'
 
 class FacebookError<StandardError;end
 
-class SocialGraph
+class HyperGraph
   API_URL = 'graph.facebook.com'
   
   # Class methods

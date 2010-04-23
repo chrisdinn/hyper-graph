@@ -1,4 +1,3 @@
-gem 'addressable'
 gem 'json'
 
 group :test do

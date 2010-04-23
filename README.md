@@ -1,7 +1,7 @@
-SocialGraph
+HyperGraph
 ===========
 
-SocialGraph is a simple Ruby library for accessing [Facebook's Graph API](http://developers.facebook.com/docs/api)
+HyperGraph is a simple Ruby library for accessing [Facebook's Graph API](http://developers.facebook.com/docs/api)
 
 Usage
 -----
@@ -9,15 +9,15 @@ Usage
 Supports id and connection get and post requests, parsing the response into a Ruby-friendly format. [Read up on the API](http://developers.facebook.com/docs/api) to learn how it works.
 
 Create a graph to store the session key:
-	irb > graph = SocialGraph.new('my-access-token')
-	=> #<SocialGraph:0x1943b98 @access_token="my-access-token">
+	irb > graph = HyperGraph.new('my-access-token')
+	=> #<HyperGraph:0x1943b98 @access_token="my-access-token">
 	irb > graph.get('me')
 	=> {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :timezone=>-4, :birthday=>"05/28/1983", :id=>518018845, :verified=>true}
     
-Or, make requests directly from SocialGraph, though you'll need an access token for most requests:
-    irb > SocialGraph.get('518018845')
+Or, make requests directly from HyperGraph, though you'll need an access token for most requests:
+    irb > HyperGraph.get('518018845')
     => {:first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :id=>518018845}
-    irb > SocialGraph.get('518018845', :access_token => 'my-access-token')
+    irb > HyperGraph.get('518018845', :access_token => 'my-access-token')
     => {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :timezone=>-4, :birthday=>"05/28/1983", :id=>518018845, :verified=>true}
     
 You can also request connections: 

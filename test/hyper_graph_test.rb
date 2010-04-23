@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SocialGraphTest < Test::Unit::TestCase
+class HyperGraphTest < Test::Unit::TestCase
 
   def setup
     @mock_connection = mock('api-connection')
@@ -18,7 +18,7 @@ class SocialGraphTest < Test::Unit::TestCase
     mock_response = stub(:body => json_api_response)
     @mock_connection.stubs(:get).with("/518018845").returns(mock_response)
     
-    assert_equal expected_parsed_response, SocialGraph.get('518018845')
+    assert_equal expected_parsed_response, HyperGraph.get('518018845')
   end
   
   def test_get_object_info_when_authenticated
@@ -38,7 +38,7 @@ class SocialGraphTest < Test::Unit::TestCase
     mock_response = stub(:body => json_api_response)
     @mock_connection.stubs(:get).with("/518018845?access_token=#{access_token}").returns(mock_response)
     
-    assert_equal expected_parsed_response, SocialGraph.get('518018845', :access_token => access_token)
+    assert_equal expected_parsed_response, HyperGraph.get('518018845', :access_token => access_token)
   end
   
   def test_get_object_connection_when_authenticated
@@ -49,7 +49,7 @@ class SocialGraphTest < Test::Unit::TestCase
     mock_response = stub(:body => json_api_response)
     @mock_connection.stubs(:get).with("/518018845/friends?access_token=#{access_token}").returns(mock_response)
     
-    assert_equal expected_sorted_array, SocialGraph.get('518018845/friends', :access_token => access_token)
+    assert_equal expected_sorted_array, HyperGraph.get('518018845/friends', :access_token => access_token)
   end
   
   def test_object_pagination
@@ -85,7 +85,7 @@ class SocialGraphTest < Test::Unit::TestCase
      mock_response = stub(:body => json_api_response)
      @mock_connection.stubs(:get).with("/me/photos?access_token=#{access_token}&limit=#{limit}").returns(mock_response)
 
-     assert_equal expected_sorted_array, SocialGraph.get('me/photos', :access_token => access_token, :limit => limit)
+     assert_equal expected_sorted_array, HyperGraph.get('me/photos', :access_token => access_token, :limit => limit)
   end
   
   def test_instance_with_stored_access_token
@@ -104,9 +104,9 @@ class SocialGraphTest < Test::Unit::TestCase
      mock_response = stub(:body => json_api_response)
      @mock_connection.stubs(:get).with("/me?access_token=#{access_token}").returns(mock_response)
      
-     graph = SocialGraph.new(access_token)
+     graph = HyperGraph.new(access_token)
      
-     assert_equal expected_parsed_response, SocialGraph.get('me', :access_token => access_token)
+     assert_equal expected_parsed_response, HyperGraph.get('me', :access_token => access_token)
      assert_equal expected_parsed_response, graph.get('me')
   end
   
@@ -116,7 +116,7 @@ class SocialGraphTest < Test::Unit::TestCase
     mock_response = stub(:body => json_api_response)
     @mock_connection.stubs(:post).with("/115934485101003/maybe", "access_token=#{access_token}").returns(mock_response)
     
-    graph = SocialGraph.new(access_token)
+    graph = HyperGraph.new(access_token)
     assert_equal true, graph.post('115934485101003/maybe')
   end
   
@@ -126,7 +126,7 @@ class SocialGraphTest < Test::Unit::TestCase
     mock_response = stub(:body => json_api_response)
     @mock_connection.stubs(:post).with('/514569082_115714061789461/comments', "access_token=#{access_token}").returns(mock_response)
 
-    graph = SocialGraph.new(access_token)
+    graph = HyperGraph.new(access_token)
     assert_raise FacebookError do
       graph.post('514569082_115714061789461/comments')
     end
@@ -138,7 +138,7 @@ class SocialGraphTest < Test::Unit::TestCase
     @mock_connection.stubs(:get).with('/me/home').returns(mock_response)
     
     assert_raise FacebookError do
-      SocialGraph.get('me/home')
+      HyperGraph.get('me/home')
     end
   end
   
@@ -148,7 +148,7 @@ class SocialGraphTest < Test::Unit::TestCase
     mock_response = stub(:body => json_api_response)
     @mock_connection.stubs(:post).with("/514569082_115714061789461/likes", "access_token=#{access_token}&method=delete").returns(mock_response)
     
-    graph = SocialGraph.new(access_token)
+    graph = HyperGraph.new(access_token)
     assert_equal true, graph.delete('514569082_115714061789461/likes')
   end
 end
