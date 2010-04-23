@@ -3,6 +3,17 @@ HyperGraph
 
 HyperGraph is a simple Ruby library for accessing [Facebook's Graph API](http://developers.facebook.com/docs/api)
 
+Installation
+-----
+	
+Install it with:	
+	
+    gem install hyper-graph
+
+Be sure to require it properly, with an underscore not a hyphen:
+
+    require 'hyper_graph'
+
 Usage
 -----
 
