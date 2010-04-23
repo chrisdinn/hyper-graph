@@ -53,6 +53,11 @@ Similarly, make a post or delete request:
     => true
 
 When parsing the response, time variables are converted into Time objects and IDs are converted to integers. Note that paging information is discarded from requests that return an array, so be sure to manage paging manually.
+
+Problems/Bugs/Requests
+-----------------------------
+
+Please, file an issue.  
 	
 Note on Patches/Pull Requests
 -----------------------------
