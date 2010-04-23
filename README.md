@@ -1,32 +1,38 @@
 SocialGraph
 ===========
 
-SocialGraph is a simple Ruby library for accessing Facebook's Graph API
+SocialGraph is a simple Ruby library for accessing (Facebook's Graph API)[http://developers.facebook.com/docs/api]
 
 Usage
 -----
 
-For now, supports basic id and connection get requests, parsing the response into a Ruby-friendly format:
+Supports id and connection get and post requests, parsing the response into a Ruby-friendly format. (Read up on the API)[http://developers.facebook.com/docs/api] to learn how it works.
 
-    # Create a graph to store the session key
+Create a graph to store the session key:
 	irb > graph = SocialGraph.new('my-access-token')
 	=> #<SocialGraph:0x1943b98 @access_token="my-access-token">
 	irb > graph.get('me')
 	=> {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :timezone=>-4, :birthday=>"05/28/1983", :id=>518018845, :verified=>true}
     
-    # Or make requests directly, access token or not
+Or, make requests directly from SocialGraph, though you'll need an access token for most requests:
     irb > SocialGraph.get('518018845')
     => {:first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :id=>518018845}
     irb > SocialGraph.get('518018845', :access_token => 'my-access-token')
     => {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :timezone=>-4, :birthday=>"05/28/1983", :id=>518018845, :verified=>true}
     
-    # Request connections 
-    irb > SocialGraph.get('me/photos', :access_token => 'my-access-token', :limit => 1)
+You can also request connections: 
+    irb > graph.get('me/photos', :limit => 1)
 	=> [{:source=>"http://sphotos.ak.fbcdn.net/hphotos-ak-snc3/hs239.snc3/22675_248026512444_511872444_3217612_4249159_n.jpg", :picture=>"http://photos-b.ak.fbcdn.net/hphotos-ak-snc3/hs239.snc3/22675_248026512444_511872444_3217612_4249159_s.jpg", 
 	:updated_time=>Sun Jan 10 18:06:36 -0500 2010, :from=>{:name=>"Jennifer Byrne", :id=>511872444}, :name=>"Finally a day off....xmas dinner, a few days late", :link=>"http://www.facebook.com/photo.php?pid=3217612&id=511872444", 
 	:icon=>"http://static.ak.fbcdn.net/rsrc.php/z2E5Y/hash/8as8iqdm.gif", :tags=>[{:name=>"Chris Dinn", :y=>15.3846, :created_time=>Sun Jan 10 18:06:41 -0500 2010, :id=>518018845, :x=>83.8889}], :created_time=>Sun Jan 10 18:00:10 -0500 2010, 
 	:id=>248026512444, :width=>604, :height=>483}]
-	
+
+Similarly, make a post request:
+	irb > graph.post('514569082_115714061789461/likes')
+    => true
+	irb > graph.post('514569082_115714061789461/comments', :message => 'durian is disgustingly delicious')
+    => true
+
 Time variables are converted into Time objects, IDs are converted to integers. Paging information is discarded from requests that return an array, so be sure to managed paging manually.
 	
 	

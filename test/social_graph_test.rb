@@ -110,4 +110,35 @@ class SocialGraphTest < Test::Unit::TestCase
      assert_equal expected_parsed_response, graph.get('me')
   end
   
+  def test_post_request_returning_true
+    json_api_response = 'true'
+    access_token = "test-access-token"
+    mock_response = stub(:body => json_api_response)
+    @mock_connection.stubs(:post).with("/115934485101003/maybe", "access_token=#{access_token}").returns(mock_response)
+    
+    graph = SocialGraph.new(access_token)
+    assert_equal true, graph.post('115934485101003/maybe')
+  end
+  
+  def test_post_request_raising_error
+    json_api_response = '{"error":{"type":"Exception","message":"(#210) User not visible"}}'
+    access_token = "test-access-token"
+    mock_response = stub(:body => json_api_response)
+    @mock_connection.stubs(:post).with('/514569082_115714061789461/comments', "access_token=#{access_token}").returns(mock_response)
+
+    graph = SocialGraph.new(access_token)
+    assert_raise FacebookError do
+      graph.post('514569082_115714061789461/comments')
+    end
+  end
+  
+  def test_get_request_raising_error
+    json_api_response = '{"error":{"type":"QueryParseException", "message":"An active access token must be used to query information about the current user."}}'
+    mock_response = stub(:body => json_api_response)
+    @mock_connection.stubs(:get).with('/me/home').returns(mock_response)
+    
+    assert_raise FacebookError do
+      SocialGraph.get('me/home')
+    end
+  end
 end

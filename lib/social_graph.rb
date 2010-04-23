@@ -3,6 +3,8 @@ require 'addressable/uri'
 require 'time'
 require 'json'
 
+class FacebookError<StandardError;end
+
 class SocialGraph
   API_URL = 'graph.facebook.com'
   
@@ -12,18 +14,31 @@ class SocialGraph
     def get(requested_object_id, options = {})
       http = Net::HTTP.new(API_URL) 
       request_path = "/#{requested_object_id}"
-      request_path << build_query(options)
+      
+      query = build_query(options)   
+      request_path << "?#{query}" unless query==""
+      
       http_response = http.get(request_path)
       data = extract_data(JSON.parse(http_response.body))
       normalize_response(data)
     end
   
+    def post(requested_object_id, options = {})
+      http = Net::HTTP.new(API_URL) 
+      request_path = "/#{requested_object_id}"
+      http_response = http.post(request_path, build_query(options))
+      if http_response.body=='true'
+        return true
+      else
+        data = extract_data(JSON.parse(http_response.body))
+        return normalize_response(data)
+      end
+    end
+  
     protected
     
     def build_query(options)
-      query = options.to_a.collect{ |i| "#{i[0].to_s}=#{i[1]}" }.sort.join('&')
-      return "?#{query}" unless query == ""
-      ""
+      options.to_a.collect{ |i| "#{i[0].to_s}=#{i[1]}" }.sort.join('&')
     end
     
     def normalize_response(response)
@@ -45,6 +60,8 @@ class SocialGraph
       normalized_hash = {}
       hash.each do |k, v|
         case k 
+        when "error"
+          raise FacebookError.new("#{hash['error']} - #{hash['message']}")
         when "id"
           normalized_hash[k.to_sym] = v.to_i
         when /_time$/
@@ -87,4 +104,7 @@ class SocialGraph
     self.class.get(requested_object_id, options.merge(:access_token => @access_token))
   end
   
+  def post(requested_object_id, options = {})
+    self.class.post(requested_object_id, options.merge(:access_token => @access_token))
+  end
 end
