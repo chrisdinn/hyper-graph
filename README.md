@@ -1,12 +1,12 @@
 SocialGraph
 ===========
 
-SocialGraph is a simple Ruby library for accessing (Facebook's Graph API)[http://developers.facebook.com/docs/api]
+SocialGraph is a simple Ruby library for accessing [Facebook's Graph API](http://developers.facebook.com/docs/api)
 
 Usage
 -----
 
-Supports id and connection get and post requests, parsing the response into a Ruby-friendly format. (Read up on the API)[http://developers.facebook.com/docs/api] to learn how it works.
+Supports id and connection get and post requests, parsing the response into a Ruby-friendly format. [Read up on the API](http://developers.facebook.com/docs/api) to learn how it works.
 
 Create a graph to store the session key:
 	irb > graph = SocialGraph.new('my-access-token')
@@ -50,4 +50,4 @@ Note on Patches/Pull Requests
 Copyright
 -----------------------------
 
-© 2010 Chris Dinn. See LICENSE for details.
+© 2010 Chris Dinn. See [LICENSE](http://github.com/chrisdinn/SocialGraph/blob/master/LICENSE) for details.
