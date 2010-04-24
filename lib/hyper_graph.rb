@@ -69,7 +69,7 @@ class HyperGraph
       hash.each do |k, v|
         case k 
         when "error"
-          raise FacebookError.new("#{v} - #{hash['message']}")
+          raise FacebookError.new("#{v['type']} - #{v['message']}")
         when "id"
           normalized_hash[k.to_sym] = v.to_i
         when /_time$/
