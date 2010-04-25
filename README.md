@@ -73,4 +73,4 @@ Note on Patches/Pull Requests
 Copyright
 -----------------------------
 
-© 2010 Chris Dinn. See [LICENSE](http://github.com/chrisdinn/SocialGraph/blob/master/LICENSE) for details.
+© 2010 Chris Dinn. See [LICENSE](http://github.com/chrisdinn/hyper-graph/blob/master/LICENSE) for details.

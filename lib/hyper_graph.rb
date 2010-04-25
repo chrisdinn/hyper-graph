@@ -1,4 +1,5 @@
 require 'net/http'
+require 'net/https'
 require 'time'
 require 'json'
 
@@ -14,7 +15,9 @@ class HyperGraph
   class << self
     # Request an object from the social graph
     def get(requested_object_id, options = {})
-      http = Net::HTTP.new(API_URL) 
+      http = Net::HTTP.new(API_URL, 443) 
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       request_path = "/#{requested_object_id}"
       
       query = build_query(options)   
@@ -27,7 +30,9 @@ class HyperGraph
   
     # Post an object to the graph
     def post(requested_object_id, options = {})
-      http = Net::HTTP.new(API_URL) 
+      http = Net::HTTP.new(API_URL, 443) 
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       request_path = "/#{requested_object_id}"
       http_response = http.post(request_path, build_query(options))
       if http_response.body=='true'
