@@ -14,6 +14,21 @@ Be sure to require it properly, with an underscore not a hyphen:
 
     require 'hyper_graph'
 
+
+Authorization
+-----------------------------
+
+The Facebook Graph API uses [OAuth 2.0](http://github.com/theRazorBlade/draft-ietf-oauth/raw/master/draft-ietf-oauth.txt) for authorization. You should be familiar with the authorization process as detailed in the [Facebook Authentication Guide](http://developers.facebook.com/docs/authentication/). HyperGraph has a couple of helpers to make the authorization process easy.
+
+First, you need to redirect the user to the authorization url. You can generate that url like so:
+    irb > HyperGraph.authorize_url('CLIENT_ID', 'REDIRECT_URI', :scope => 'SCOPE1,SCOPE2', :display => 'popup')
+    => "https://graph.facebook.com/oauth/authorize?client_id=CLIENT_ID&display=popup&redirect_uri=REDIRECT_URI&scope=SCOPE1,SCOPE2"
+
+After the user authorizes your application, they'll be redirected by Facebook to the redirect uri you specified along with one parameter, "code". You can use that code to retrieve an access token.
+    irb > HyperGraph.get_access_token('CLIENT_ID', 'CLIENT_SECRET', 'REDIRECT_URI', 'CODE')
+	=> "your-access-token"
+Your access token is tied to both your Facebook application and the redirect uri specified, so be sure pass the same uri and client information when retrieving your access token that you used when getting user authorization.
+
 Usage
 -----
 

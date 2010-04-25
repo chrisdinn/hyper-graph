@@ -4,6 +4,7 @@ class HyperGraphTest < Test::Unit::TestCase
 
   def setup
     @mock_connection = mock('api-connection')
+    @mock_connection.stubs(:verify_mode=)
     Net::HTTP.stubs(:new).returns(@mock_connection)
   end
   
@@ -16,6 +17,7 @@ class HyperGraphTest < Test::Unit::TestCase
                                   :link => "http://www.facebook.com/chrisdinn"}
                                   
     mock_response = stub(:body => json_api_response)
+    @mock_connection.expects(:use_ssl=).with(true)
     @mock_connection.stubs(:get).with("/518018845").returns(mock_response)
     
     assert_equal expected_parsed_response, HyperGraph.get('518018845')
@@ -36,6 +38,7 @@ class HyperGraphTest < Test::Unit::TestCase
                                   
     access_token = "test-access-token"
     mock_response = stub(:body => json_api_response)
+    @mock_connection.expects(:use_ssl=).with(true)
     @mock_connection.stubs(:get).with("/518018845?access_token=#{access_token}").returns(mock_response)
     
     assert_equal expected_parsed_response, HyperGraph.get('518018845', :access_token => access_token)
@@ -47,6 +50,7 @@ class HyperGraphTest < Test::Unit::TestCase
                                   
     access_token = "test-access-token"
     mock_response = stub(:body => json_api_response)
+    @mock_connection.expects(:use_ssl=).with(true)
     @mock_connection.stubs(:get).with("/518018845/friends?access_token=#{access_token}").returns(mock_response)
     
     assert_equal expected_sorted_array, HyperGraph.get('518018845/friends', :access_token => access_token)
@@ -83,6 +87,7 @@ class HyperGraphTest < Test::Unit::TestCase
      access_token = "test-access-token"
      limit = 2
      mock_response = stub(:body => json_api_response)
+     @mock_connection.expects(:use_ssl=).with(true)
      @mock_connection.stubs(:get).with("/me/photos?access_token=#{access_token}&limit=#{limit}").returns(mock_response)
 
      assert_equal expected_sorted_array, HyperGraph.get('me/photos', :access_token => access_token, :limit => limit)
@@ -102,11 +107,10 @@ class HyperGraphTest < Test::Unit::TestCase
                                   :updated_time => Time.parse("2010-03-17T20:19:03+0000")}
      access_token = "test-access-token"
      mock_response = stub(:body => json_api_response)
+     @mock_connection.expects(:use_ssl=).with(true)
      @mock_connection.stubs(:get).with("/me?access_token=#{access_token}").returns(mock_response)
      
      graph = HyperGraph.new(access_token)
-     
-     assert_equal expected_parsed_response, HyperGraph.get('me', :access_token => access_token)
      assert_equal expected_parsed_response, graph.get('me')
   end
   
@@ -114,6 +118,7 @@ class HyperGraphTest < Test::Unit::TestCase
     json_api_response = 'true'
     access_token = "test-access-token"
     mock_response = stub(:body => json_api_response)
+    @mock_connection.expects(:use_ssl=).with(true)
     @mock_connection.stubs(:post).with("/115934485101003/maybe", "access_token=#{access_token}").returns(mock_response)
     
     graph = HyperGraph.new(access_token)
@@ -124,6 +129,7 @@ class HyperGraphTest < Test::Unit::TestCase
     json_api_response = '{"error":{"type":"Exception","message":"(#210) User not visible"}}'
     access_token = "test-access-token"
     mock_response = stub(:body => json_api_response)
+    @mock_connection.expects(:use_ssl=).with(true)
     @mock_connection.stubs(:post).with('/514569082_115714061789461/comments', "access_token=#{access_token}").returns(mock_response)
 
     graph = HyperGraph.new(access_token)
@@ -135,6 +141,7 @@ class HyperGraphTest < Test::Unit::TestCase
   def test_get_request_raising_error
     json_api_response = '{"error":{"type":"QueryParseException", "message":"An active access token must be used to query information about the current user."}}'
     mock_response = stub(:body => json_api_response)
+    @mock_connection.expects(:use_ssl=).with(true)
     @mock_connection.stubs(:get).with('/me/home').returns(mock_response)
     
     assert_raise FacebookError do
@@ -146,9 +153,42 @@ class HyperGraphTest < Test::Unit::TestCase
     json_api_response = 'true'
     access_token = "test-access-token"
     mock_response = stub(:body => json_api_response)
+    @mock_connection.expects(:use_ssl=).with(true)
     @mock_connection.stubs(:post).with("/514569082_115714061789461/likes", "access_token=#{access_token}&method=delete").returns(mock_response)
     
     graph = HyperGraph.new(access_token)
     assert_equal true, graph.delete('514569082_115714061789461/likes')
+  end
+
+  def test_authorize_url
+    client_id = "your-client-id"
+    callback_url = "http://yoursite.com/callback"
+    
+    expected_authorize_url = "https://graph.facebook.com/oauth/authorize?client_id=#{client_id}&redirect_uri=#{callback_url}"
+    assert_equal expected_authorize_url, HyperGraph.authorize_url(client_id, callback_url)
+  end
+  
+  def test_authorize_url_with_scope_and_display
+    client_id = "your-client-id"
+    callback_url = "http://yoursite.com/callback"
+    scope = "user_photos,user_videos,stream_publish"
+    display = 'popup'
+    
+    expected_authorize_url = "https://graph.facebook.com/oauth/authorize?client_id=#{client_id}&display=#{display}&redirect_uri=#{callback_url}&scope=#{scope}"
+    assert_equal expected_authorize_url, HyperGraph.authorize_url(client_id, callback_url, :scope => scope, :display => display)
+  end
+  
+  def test_get_access_token
+    access_token = "your-token-here"
+    client_id = "your-client-id"
+    client_secret = "your-client-secret"
+    code = "facebook-oauth-code"
+    callback_url = "http://yoursite.com/callback"
+    api_response = "access_token=#{access_token}"
+    
+    mock_response = stub(:body => api_response)
+    @mock_connection.expects(:use_ssl=).with(true)
+    @mock_connection.stubs(:get).with("/oauth/access_token?client_id=#{client_id}&client_secret=#{client_secret}&code=#{code}&redirect_uri=#{callback_url}").returns(mock_response)
+    assert_equal access_token, HyperGraph.get_access_token(client_id, client_secret, callback_url, code)    
   end
 end

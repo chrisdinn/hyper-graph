@@ -15,9 +15,7 @@ class HyperGraph
   class << self
     # Request an object from the social graph
     def get(requested_object_id, options = {})
-      http = Net::HTTP.new(API_URL, 443) 
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http = initialize_http_connection
       request_path = "/#{requested_object_id}"
       
       query = build_query(options)   
@@ -30,9 +28,7 @@ class HyperGraph
   
     # Post an object to the graph
     def post(requested_object_id, options = {})
-      http = Net::HTTP.new(API_URL, 443) 
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http = initialize_http_connection
       request_path = "/#{requested_object_id}"
       http_response = http.post(request_path, build_query(options))
       if http_response.body=='true'
@@ -47,7 +43,20 @@ class HyperGraph
     def delete(requested_object_id, options = {})
        post(requested_object_id, options.merge(:method => 'delete'))
     end
-  
+    
+    # Redirect users to this url to get authorization
+    def authorize_url(client_id, redirect_uri, options={})
+      "https://#{API_URL}/oauth/authorize?#{build_query(options.merge(:client_id => client_id, :redirect_uri => redirect_uri))}"
+    end
+    
+    def get_access_token(client_id, client_secret, redirect_uri, code)
+      http = initialize_http_connection
+      request_path = "/oauth/access_token"
+      request_path << "?#{build_query(:client_id => client_id, :client_secret => client_secret, :redirect_uri => redirect_uri, :code => code)}"
+      http_response = http.get(request_path)
+      http_response.body.split('=')[1]
+    end
+    
     protected
     
     def build_query(options)
@@ -66,6 +75,13 @@ class HyperGraph
     end
     
     private
+    
+    def initialize_http_connection
+      http = Net::HTTP.new(API_URL, 443) 
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http
+    end
     
     # Converts JSON-parsed hash keys and values into a Ruby-friendly format
     # Convert :id into integer and :updated_time into Time and all keys into symbols
