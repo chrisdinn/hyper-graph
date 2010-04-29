@@ -35,44 +35,51 @@ Usage
 Supports 'ID' and 'ID/CONNECTION_TYPE' API requests using GET, POST and DELETE. HyperGraph parses the API's JSON response into a Ruby-friendly format. 
 [Read up on the API](http://developers.facebook.com/docs/api) to learn what that means.
 
-Create a graph to store the session key:
+Version 0.3 introduces a new, friendlier HyperGraph API. If you're familiar with previous versions, review the updated API but don't worry: the new API 100% backward compatible.
+
+Create a HyperGraph to store your access token:
 	irb > graph = HyperGraph.new('my-access-token')
 	=> #<HyperGraph:0x1943b98 @access_token="my-access-token">
-	irb > graph.get('me')
-    => {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", 
-	:link=>"http://www.facebook.com/chrisdinn", :timezone=>-4, :birthday=>"05/28/1983", :id=>518018845, :verified=>true}
+	
+You can load an object and make requests against it:	
+    irb > me = graph.object(518018845)
+    => #<HyperGraphObject:0x1945934 @id="518018845" @access_token="my-access-token">
+You can make connection requests, too:
+	irb > me.get(:likes)
+	=> [{:category=>"Websites", :name=>"Slate.com", :id=>21516776437}]
+	irb > graph.object('514569082_115714061789461').post(:comments, :message => 'durian is disgustingly delicious')
+	=> true
+	irb > graph.object('514569082_115714061789461').delete(:likes)
+	=> true
     
-Or, make requests directly from HyperGraph, though you'll need an access token for most requests:
-    irb > HyperGraph.get('518018845')
-    => {:first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", :link=>"http://www.facebook.com/chrisdinn", :id=>518018845}
-    irb > HyperGraph.get('518018845', :access_token => 'my-access-token')
-    => {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", 
-    :link=>"http://www.facebook.com/chrisdinn", :timezone=>-4, :birthday=>"05/28/1983", :id=>518018845, :verified=>true}
-    
-You can also request connections: 
+Or, you can request from the graph directly:
+    irb > graph.get('me')
+    => {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", ...
     irb > graph.get('me/photos', :limit => 1)
-	=> [{:source=>"http://sphotos.ak.fbcdn.net/hphotos-ak-snc3/hs239.snc3/22675_248026512444_511872444_3217612_4249159_n.jpg", 
-	:picture=>"http://photos-b.ak.fbcdn.net/hphotos-ak-snc3/hs239.snc3/22675_248026512444_511872444_3217612_4249159_s.jpg", 
-	:updated_time=>Sun Jan 10 18:06:36 -0500 2010, :from=>{:name=>"Jennifer Byrne", :id=>511872444}, 
-	:name=>"Finally a day off....xmas dinner, a few days late", :link=>"http://www.facebook.com/photo.php?pid=3217612&id=511872444", 
-	:icon=>"http://static.ak.fbcdn.net/rsrc.php/z2E5Y/hash/8as8iqdm.gif", :tags=>[{:name=>"Chris Dinn", :y=>15.3846, 
-	:created_time=>Sun Jan 10 18:06:41 -0500 2010, :id=>518018845, :x=>83.8889}], :created_time=>Sun Jan 10 18:00:10 -0500 2010, 
-	:id=>248026512444, :width=>604, :height=>483}]
+	=> [{:source=>"http://sphotos.ak.fbcdn.net/hphotos-a...
 
-Similarly, make a post or delete request:
-	irb > graph.post('514569082_115714061789461/likes')
+Similarly, make a post or delete request directly from the graph:
+    irb > graph.post('514569082_115714061789461/likes')
     => true
-	irb > graph.post('514569082_115714061789461/comments', :message => 'durian is disgustingly delicious')
+    irb > graph.post('514569082_115714061789461/comments', :message => 'durian is disgustingly delicious')
     => true
-	irb > graph.delete('514569082_115714061789461/likes')
+    irb > graph.delete('514569082_115714061789461/likes')
     => true
+	    
+As well, you can make requests directly from HyperGraph, with or without an access token (though you'll need an access token for most requests):
+    irb > HyperGraph.get('518018845')
+    => {:first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", ...
+    irb > HyperGraph.get('518018845', :access_token => 'my-access-token')
+    => {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", ...
 
-When parsing the response, time variables are converted into Time objects and IDs are converted to integers. Note that paging information is discarded from requests that return an array, so be sure to manage paging manually.
+HyperGraph tries to convert `id` values into integers when possible, for easy database storage. When that's not possible, the `id` will be returned as a string. Values representing a date are converted into Time objects.
+
+Note that paging information is discarded from requests that return an array, so be sure to manage paging manually.
 
 Problems/Bugs/Requests
 -----------------------------
 
-Please, file an issue.  
+Please, file an issue.
 	
 Note on Patches/Pull Requests
 -----------------------------
