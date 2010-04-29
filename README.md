@@ -35,7 +35,7 @@ Usage
 Supports 'ID' and 'ID/CONNECTION_TYPE' API requests using GET, POST and DELETE. HyperGraph parses the API's JSON response into a Ruby-friendly format. 
 [Read up on the API](http://developers.facebook.com/docs/api) to learn what that means.
 
-Version 0.3 introduces a new, friendlier HyperGraph API. If you're familiar with previous versions, review the updated API but don't worry: the new API 100% backward compatible.
+Version 0.3 introduces a new, friendlier HyperGraph API. If you're familiar with previous versions, review the updated API but don't worry: the new API is 100% backward compatible.
 
 Create a HyperGraph to store your access token:
 	irb > graph = HyperGraph.new('my-access-token')
@@ -44,6 +44,9 @@ Create a HyperGraph to store your access token:
 You can load an object and make requests against it:	
     irb > me = graph.object(518018845)
     => #<HyperGraphObject:0x1945934 @id="518018845" @access_token="my-access-token">
+    irb > me = graph.object(518018845).get
+    => {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", ...
+
 You can make connection requests, too:
 	irb > me.get(:likes)
 	=> [{:category=>"Websites", :name=>"Slate.com", :id=>21516776437}]
