@@ -187,7 +187,7 @@ class HyperGraphTest < Test::Unit::TestCase
     client_secret = "your-client-secret"
     code = "facebook-oauth-code"
     callback_url = "http://yoursite.com/callback"
-    api_response = "access_token=#{access_token}"
+    api_response = "access_token=#{access_token}&expires=5008"
     
     mock_response = stub(:body => api_response)
     @mock_connection.expects(:use_ssl=).with(true)
