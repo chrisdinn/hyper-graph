@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = "hyper-graph"
-  s.version     = "0.3"
+  s.version     = "0.3.1"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Chris Dinn"]
   s.email       = ["chrisgdinn@gmail.com"]
