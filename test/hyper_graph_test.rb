@@ -53,7 +53,10 @@ class HyperGraphTest < Test::Unit::TestCase
     @mock_connection.expects(:use_ssl=).with(true)
     @mock_connection.stubs(:get).with("/518018845/friends?access_token=#{access_token}").returns(mock_response)
     
-    assert_equal expected_sorted_array, HyperGraph.get('518018845/friends', :access_token => access_token)
+    friends = HyperGraph.get('518018845/friends', :access_token => access_token)
+    expected_sorted_array.each do |friend|
+      assert friends.include?(friend)
+    end
   end
   
   def test_object_pagination

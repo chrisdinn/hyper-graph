@@ -44,7 +44,10 @@ class HyperGraphObjectTest < Test::Unit::TestCase
     graph = HyperGraph.new(access_token)
     graph_object = graph.object('518018845')
     
-    assert_equal expected_sorted_array, graph_object.get(:friends)
+    friends = graph_object.get(:friends)
+    expected_sorted_array.each do |friend|
+      assert friends.include?(friend)
+    end
   end
 
   def test_post_request_returning_true

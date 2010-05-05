@@ -116,13 +116,7 @@ class HyperGraph
     end
     
     def normalize_array(array)
-      array.collect{ |item| normalize_response(item) }.sort do |a, b| 
-        if a[:id] && b[:id]
-          a[:id] <=> b[:id]
-        elsif a[:name]&&b[:name]
-          a[:name] <=> b[:name]
-        end
-      end
+      array.collect{ |item| normalize_response(item) }
     end
     
     # Extracts data from "data" key in Hash, if present
