@@ -180,10 +180,13 @@ class HyperGraphTest < Test::Unit::TestCase
                                 ] 
     access_token = "test-access-token"
     mock_response = stub(:body => json_api_response)
-    @mock_connection.expects(:use_ssl=).with(true)
+    @mock_connection.stubs(:use_ssl=).with(true)
     @mock_connection.stubs(:get).with("/search?access_token=#{access_token}&q=big%20band").returns(mock_response)
     
     assert_equal expected_parsed_response, HyperGraph.search('big band', :access_token => access_token)
+    
+    graph = HyperGraph.new('test-access-token')
+    assert_equal expected_parsed_response, graph.search('big band', :access_token => access_token)
   end
 
   def test_authorize_url

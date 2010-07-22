@@ -54,7 +54,7 @@ You can make connection requests, too:
 	=> true
 	irb > graph.object('514569082_115714061789461').delete(:likes)
 	=> true
-    
+
 Or, you can request from the graph directly:
     irb > graph.get('me')
     => {:updated_time=>Wed Mar 17 16:19:03 -0400 2010, :first_name=>"Chris", :last_name=>"Dinn", ...
@@ -68,7 +68,13 @@ Similarly, make a post or delete request directly from the graph:
     => true
     irb > graph.delete('514569082_115714061789461/likes')
     => true
-	    
+
+You can search, using the search function:
+	irb > graph.search('big band')
+	=> [{ :id => '113412341299949562_134212343177', :from => { :name => "Big Band Ballroom"...
+	irb > HyperGraph.search('big band')
+	=> [{ :id => '113412341299949562_134212343177', :from => { :name => "Big Band Ballroom"...
+	
 As well, you can make requests directly from HyperGraph, with or without an access token (though you'll need an access token for most requests):
     irb > HyperGraph.get('518018845')
     => {:first_name=>"Chris", :last_name=>"Dinn", :name=>"Chris Dinn", ...
