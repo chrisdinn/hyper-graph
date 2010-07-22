@@ -162,6 +162,29 @@ class HyperGraphTest < Test::Unit::TestCase
     graph = HyperGraph.new(access_token)
     assert_equal true, graph.delete('514569082_115714061789461/likes')
   end
+  
+  def test_graph_search
+    json_api_response = %'{"data": [ 
+                            {"id": "113412341299949562_134212343177", "from": {"name": "Big Band Ballroom", "category": "Local_business", "id": "1334523899949562"}, "message": "Big band at our ballroom", "link": "http://www.facebook.com/", "type": "link" },
+                            {"id": "100123706392497_142067305819279", "from": {"name": "Big Band Guy", "id": "100000706392497"},"message": "What a band", "type": "status" }
+                        ]}'    
+    expected_parsed_response = [ { :id => '113412341299949562_134212343177', 
+                                   :from => { :name => "Big Band Ballroom", :category=> "Local_business", :id => 1334523899949562 }, 
+                                   :message => "Big band at our ballroom", 
+                                   :link => "http://www.facebook.com/", 
+                                   :type => "link"},
+                                 { :id => "100123706392497_142067305819279",
+                                   :from => { :name => "Big Band Guy", :id => 100000706392497 },
+                                   :message => "What a band",
+                                   :type => "status" }
+                                ] 
+    access_token = "test-access-token"
+    mock_response = stub(:body => json_api_response)
+    @mock_connection.expects(:use_ssl=).with(true)
+    @mock_connection.stubs(:get).with("/search?access_token=#{access_token}&q=big%20band").returns(mock_response)
+    
+    assert_equal expected_parsed_response, HyperGraph.search('big band', :access_token => access_token)
+  end
 
   def test_authorize_url
     client_id = "your-client-id"

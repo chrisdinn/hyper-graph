@@ -55,7 +55,7 @@ class HyperGraph
       request_path = "/oauth/access_token"
       request_path << "?#{build_query(:client_id => client_id, :client_secret => client_secret, :redirect_uri => redirect_uri, :code => code)}"
       http_response = http.get(request_path)
-      http_response.body.split(/=|&/)[1]
+      http_response.body.split(/\=|&/)[1]
     end
     
     protected
@@ -93,7 +93,7 @@ class HyperGraph
         when "error"
           raise FacebookError.new("#{v['type']} - #{v['message']}")
         when "id"
-          if (v.to_i == v.to_s.to_i)
+          if (v == v.to_i.to_s)
             normalized_hash[k.to_sym] = v.to_i 
           else
             normalized_hash[k.to_sym] = v 
