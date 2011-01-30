@@ -212,12 +212,12 @@ class HyperGraphTest < Test::Unit::TestCase
     client_id = "your-client-id"
     client_secret = "your-client-secret"
     code = "facebook-oauth-code"
-    callback_url = "http://yoursite.com/callback"
+    callback_url = "http://yoursite.com/callback?param1=somevalue&param2=unencoded string value"
     api_response = "access_token=#{access_token}&expires=5008"
     
     mock_response = stub(:body => api_response)
     @mock_connection.expects(:use_ssl=).with(true)
-    @mock_connection.stubs(:get).with("/oauth/access_token?client_id=#{client_id}&client_secret=#{client_secret}&code=#{code}&redirect_uri=#{callback_url}").returns(mock_response)
+    @mock_connection.expects(:get).with("/oauth/access_token?client_id=#{client_id}&client_secret=#{client_secret}&code=#{code}&redirect_uri=#{URI.encode(callback_url)}").returns(mock_response)
     assert_equal access_token, HyperGraph.get_access_token(client_id, client_secret, callback_url, code)    
   end
 end
