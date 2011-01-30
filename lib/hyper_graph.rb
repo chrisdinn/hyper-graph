@@ -51,10 +51,11 @@ class HyperGraph
     end
     
     def get_access_token(client_id, client_secret, redirect_uri, code)
+      require 'uri'
       http = initialize_http_connection
       request_path = "/oauth/access_token"
       request_path << "?#{build_query(:client_id => client_id, :client_secret => client_secret, :redirect_uri => redirect_uri, :code => code)}"
-      http_response = http.get(request_path)
+      http_response = http.get(URI.encode(request_path))
       http_response.body.split(/\=|&/)[1]
     end
     
